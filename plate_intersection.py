@@ -75,8 +75,29 @@ mod.operation = 'INTERSECT'
 mod.object = obj2
 bpy.ops.object.modifier_apply({"object": obj1},modifier=mod.name)
 
-bm1 = bmesh.new()
-bm1.from_mesh(obj1.data)
-
 # Removing a object
 bpy.data.objects.remove(obj2, do_unlink=True)
+
+bm = bmesh.new()
+bm.from_mesh(obj1.data)
+
+bm.verts.ensure_lookup_table()
+bm.edges.ensure_lookup_table()
+bm.faces.ensure_lookup_table()
+
+# Get the face by index
+face = bm.faces[top_face_idx]
+
+# Get the normal vector of the face and normalize it
+normal = face.normal.normalized()
+
+# Calculate the displacement vector
+displacement = normal * 1.5
+
+# Translate the vertices of the face
+for vert in face.verts:
+    vert.co += displacement
+
+# Update the mesh data and free the BMesh
+bm.to_mesh(mesh)
+bm.free()
