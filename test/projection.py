@@ -2,7 +2,7 @@ import bpy
 from mathutils import Vector
 
 # Set the active object to the CAD model
-cad_object =bpy.data.objects['Cube']
+cad_object = bpy.data.objects['Cube']
 
 # Get the vertices of the CAD model
 cad_vertices = [Vector(v.co) for v in cad_object.data.vertices]
